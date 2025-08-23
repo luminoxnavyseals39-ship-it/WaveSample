@@ -114,10 +114,12 @@ function initializeSources() {
 
   const phaseContainer = document.getElementById('phaseSliders');
   phaseContainer.innerHTML = '';
+
   for (let i = 0; i < numSources; i++) {
     let margin = 100;
-    let y = map(i, 0, max(1, numSources - 1), margin, height - margin);
-    sources.push(createVector(50, y));
+    let x = map(i, 0, max(1, numSources - 1), margin, width - margin); // 横方向に等間隔
+    let y = height / 2; // 中央に固定
+    sources.push(createVector(x, y));
     phases.push(PI * i / numSources);
 
     const label = document.createElement('label');
