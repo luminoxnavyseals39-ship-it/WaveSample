@@ -2,20 +2,15 @@ let t = 0;
 let numSources = 5;
 let sources = [];
 let phases = [];
-let phaseSliders = [];
 
 function setup() {
-  //createCanvas(800, 400);
-  createCanvas(windowWidth/2, windowHeight/2);
+  createCanvas(800, 400);
   noStroke();
   initializeSources();
 
-  // 波源数スライダー
-  const numSlider = document.getElementById("numSlider");
-  const numLabel = document.getElementById("numLabel");
-  numSlider.addEventListener("input", () => {
-    numSources = int(numSlider.value);
-    numLabel.textContent = numSources;
+  document.getElementById("numSources").addEventListener("input", (e) => {
+    numSources = parseInt(e.target.value);
+    document.getElementById("numLabel").textContent = numSources;
     initializeSources();
   });
 }
@@ -27,17 +22,12 @@ function draw() {
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
       let combined = 0;
-      let p = createVector(x, y);
-
       for (let i = 0; i < numSources; i++) {
-        let d = p.dist(sources[i]);
-        let phaseDeg = float(phaseSliders[i].value);
-        let phaseRad = radians(phaseDeg);
-        combined += sin(d * 0.05 - t + phaseRad);
+        let d = dist(x, y, sources[i].x, sources[i].y);
+        combined += sin(d * 0.05 - t + radians(phases[i]));
       }
-
-      let r = int(map(abs(combined), 0, numSources, 0, 255));
-      let b = int(map(combined, -numSources, numSources, 0, 255));
+      let r = map(abs(combined), 0, numSources, 0, 255);
+      let b = map(combined, -numSources, numSources, 0, 255);
       let index = (x + y * width) * 4;
       pixels[index] = r;
       pixels[index + 1] = 0;
@@ -45,16 +35,16 @@ function draw() {
       pixels[index + 3] = 255;
     }
   }
+
   updatePixels();
 
-  // 波源の描画
-  fill(0, 100, 255);
+  fill(255, 0, 0);
   for (let i = 0; i < numSources; i++) {
     let s = sources[i];
     ellipse(s.x, s.y, 20, 20);
-    fill(0);
-    text(`Source ${i + 1}`, s.x - 20, s.y - 15);
-    fill(0, 100, 255);
+    fill(255);
+    text("Source " + (i + 1), s.x - 20, s.y - 15);
+    fill(255, 0, 0);
   }
 
   t += 0.05;
@@ -64,30 +54,30 @@ function draw() {
 function initializeSources() {
   sources = [];
   phases = [];
-  phaseSliders = [];
 
-  const phaseControls = document.getElementById("phaseControls");
-  phaseControls.innerHTML = "";
+  let phaseContainer = document.getElementById("phaseControls");
+  phaseContainer.innerHTML = "";
 
   for (let i = 0; i < numSources; i++) {
-    let y = map(i, 0, max(1, numSources - 1), 100, height - 100);
+    let margin = height / numSources;
+    let y = map(i, 0, Math.max(1, numSources - 1), margin, height - margin);
     sources.push(createVector(50, y));
-    let defaultPhase = 180.0 * i / numSources;
+    let defaultPhase = (180.0 * i) / numSources;
     phases.push(defaultPhase);
 
     let label = document.createElement("label");
-    label.textContent = `位相(deg) ${i + 1}: `;
+    label.textContent = `Phase ${i + 1}: `;
     let slider = document.createElement("input");
     slider.type = "range";
     slider.min = "0";
     slider.max = "360";
     slider.value = defaultPhase;
-    slider.style.marginBottom = "5px";
+    slider.oninput = (e) => {
+      phases[i] = parseFloat(e.target.value);
+    };
 
-    phaseControls.appendChild(label);
-    phaseControls.appendChild(slider);
-    phaseControls.appendChild(document.createElement("br"));
-
-    phaseSliders.push(slider);
+    phaseContainer.appendChild(label);
+    phaseContainer.appendChild(slider);
+    phaseContainer.appendChild(document.createElement("br"));
   }
 }

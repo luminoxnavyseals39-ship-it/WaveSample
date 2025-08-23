@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>Wave Interference</title>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <title>Wave Interference Visualization</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   </head>
   <body>
-    <div>
-      <label>波源の数: <span id="numLabel">5</span></label>
-      <input type="range" id="numSlider" min="1" max="5" value="5" />
+    <div id="gui">
+      <label>Number of Sources: </label>
+      <input type="range" id="numSources" min="1" max="5" value="5" />
+      <span id="numLabel">5</span>
+      <div id="phaseControls"></div>
     </div>
-    <div id="phaseControls"></div>
     <script src="sketch.js"></script>
   </body>
 </html>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-  canvas {
-    display: block;
-  }
-</style>
