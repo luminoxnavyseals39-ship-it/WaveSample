@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wave Interference</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <label>波源の数: <span id="numLabel">5</span></label>
+      <input type="range" id="numSlider" min="1" max="5" value="5" />
+    </div>
+    <div id="phaseControls"></div>
+    <script src="sketch.js"></script>
+  </body>
+</html>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+</style>
