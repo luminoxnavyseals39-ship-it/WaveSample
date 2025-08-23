@@ -8,7 +8,7 @@ let canvas;
 
 function setup() {
   const guiHeight = document.getElementById('controls').offsetHeight;
-  canvas = createCanvas(windowWidth, windowHeight - guiHeight);
+  canvas = createCanvas(windowWidth * 0.5, (windowHeight - guiHeight)*0.5);
   canvas.position(0, guiHeight);
   canvas.style('z-index', '-1');
   noStroke();
