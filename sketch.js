@@ -9,7 +9,7 @@ let canvas;
 function setup() {
   const guiHeight = document.getElementById('controls').offsetHeight;
   canvas = createCanvas(windowWidth * 0.5, (windowHeight - guiHeight)*0.5);
-  canvas.position(0, guiHeight);
+  canvas.position(windowWidth * 0.1, guiHeight * 3);
   canvas.style('z-index', '-1');
   noStroke();
 
@@ -136,7 +136,7 @@ function initializeSources() {
 
 function windowResized() {
   const guiHeight = document.getElementById('controls').offsetHeight;
-  resizeCanvas(windowWidth, windowHeight - guiHeight);
+  resizeCanvas(windowWidth * 0.5, (windowHeight - guiHeight) * 0.5);
   canvas.position(0, guiHeight);
   initializeSources();
 }
