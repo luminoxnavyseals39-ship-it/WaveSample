@@ -1,31 +1,48 @@
-let t = 0;
 let numSources = 5;
 let sources = [];
 let phases = [];
+let draggingIndex = -1;
+let waveFrequency = 0.05;
+let t = 0;
+let canvas;
 
 function setup() {
-  createCanvas(windowWidth*0.5, windowHeight * 0.5);
+  const guiHeight = document.getElementById('controls').offsetHeight;
+  canvas = createCanvas(windowWidth, windowHeight - guiHeight);
+  canvas.position(0, guiHeight);
+  canvas.style('z-index', '-1');
   noStroke();
-  initializeSources();
 
-  document.getElementById("numSources").addEventListener("input", (e) => {
-    numSources = parseInt(e.target.value);
-    document.getElementById("numLabel").textContent = numSources;
-    initializeSources();
-  });
+  setupGUI();
+  initializeSources();
 }
 
 function draw() {
   background(255);
-  loadPixels();
 
+  waveFrequency = parseFloat(document.getElementById('waveFrequency').value);
+  numSources = parseInt(document.getElementById('numSources').value);
+
+  if (sources.length !== numSources) {
+    initializeSources();
+  }
+
+  for (let i = 0; i < numSources; i++) {
+    let phaseDeg = parseFloat(document.getElementById('phase' + i).value);
+    phases[i] = radians(phaseDeg);
+  }
+
+  loadPixels();
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
+      let p = createVector(x, y);
       let combined = 0;
+
       for (let i = 0; i < numSources; i++) {
-        let d = dist(x, y, sources[i].x, sources[i].y);
-        combined += sin(d * 0.05 - t + radians(phases[i]));
+        let d = p5.Vector.dist(p, sources[i]);
+        combined += sin(d * waveFrequency - t + phases[i]);
       }
+
       let r = map(abs(combined), 0, numSources, 0, 255);
       let b = map(combined, -numSources, numSources, 0, 255);
       let index = (x + y * width) * 4;
@@ -35,7 +52,6 @@ function draw() {
       pixels[index + 3] = 255;
     }
   }
-
   updatePixels();
 
   fill(255, 0, 0);
@@ -51,38 +67,76 @@ function draw() {
   frameRate(15);
 }
 
+function mousePressed() {
+  for (let i = 0; i < sources.length; i++) {
+    let d = dist(mouseX, mouseY, sources[i].x, sources[i].y);
+    if (d < 20) {
+      draggingIndex = i;
+      break;
+    }
+  }
+}
+
+function mouseDragged() {
+  if (draggingIndex !== -1) {
+    sources[draggingIndex].set(mouseX, mouseY);
+  }
+}
+
+function mouseReleased() {
+  draggingIndex = -1;
+}
+
+function setupGUI() {
+  const numSlider = document.getElementById('numSources');
+  numSlider.addEventListener('input', initializeSources);
+
+  const phaseContainer = document.getElementById('phaseSliders');
+  phaseContainer.innerHTML = '';
+  for (let i = 0; i < numSources; i++) {
+    const label = document.createElement('label');
+    label.innerText = 'Phase ' + (i + 1);
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 0;
+    slider.max = 360;
+    slider.value = 180 * i / numSources;
+    slider.id = 'phase' + i;
+    slider.style.width = '100px';
+    phaseContainer.appendChild(label);
+    phaseContainer.appendChild(slider);
+  }
+}
+
 function initializeSources() {
   sources = [];
   phases = [];
 
-  let phaseContainer = document.getElementById("phaseControls");
-  phaseContainer.innerHTML = "";
-
+  const phaseContainer = document.getElementById('phaseSliders');
+  phaseContainer.innerHTML = '';
   for (let i = 0; i < numSources; i++) {
     let margin = 100;
-    let y = map(i, 0, Math.max(1, numSources - 1), margin, height - margin);
+    let y = map(i, 0, max(1, numSources - 1), margin, height - margin);
     sources.push(createVector(50, y));
-    let defaultPhase = (180.0 * i) / numSources;
-    phases.push(defaultPhase);
+    phases.push(PI * i / numSources);
 
-    let label = document.createElement("label");
-    label.textContent = `Phase ${i + 1}: `;
-    let slider = document.createElement("input");
-    slider.type = "range";
-    slider.min = "0";
-    slider.max = "360";
-    slider.value = defaultPhase;
-    slider.oninput = (e) => {
-      phases[i] = parseFloat(e.target.value);
-    };
-
+    const label = document.createElement('label');
+    label.innerText = 'Phase ' + (i + 1);
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 0;
+    slider.max = 360;
+    slider.value = degrees(phases[i]);
+    slider.id = 'phase' + i;
+    slider.style.width = '100px';
     phaseContainer.appendChild(label);
     phaseContainer.appendChild(slider);
-    phaseContainer.appendChild(document.createElement("br"));
   }
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth * 0.5, windowHeight * 0.5);
-  initializeSources(); // 再配置
+  const guiHeight = document.getElementById('controls').offsetHeight;
+  resizeCanvas(windowWidth, windowHeight - guiHeight);
+  canvas.position(0, guiHeight);
+  initializeSources();
 }

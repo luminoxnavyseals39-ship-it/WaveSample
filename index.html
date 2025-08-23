@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Wave Interference Visualization</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  </head>
-  <body>
-    <div id="gui">
-      <label>Number of Sources: </label>
-      <input type="range" id="numSources" min="1" max="5" value="5" />
-      <span id="numLabel">5</span>
-      <div id="phaseControls"></div>
-    </div>
-    <script src="sketch.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Wave Interference</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="controls">
+    <label>Number of Sources</label>
+    <input type="range" id="numSources" min="1" max="5" value="5">
+    <label>Wave Frequency</label>
+    <input type="range" id="waveFrequency" min="0.01" max="0.2" step="0.01" value="0.05">
+    <div id="phaseSliders"></div>
+  </div>
+  <script src="sketch.js"></script>
+</body>
 </html>
