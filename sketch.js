@@ -130,7 +130,7 @@ function initializeSources() {
   phaseContainer.innerHTML = '';
 
   for (let i = 0; i < numSources; i++) {
-    let margin = 100;
+    let margin = 160;
     let x = map(i, 0, max(1, numSources - 1), margin, width - margin); // 横方向に等間隔
     let y = height / 2; // 中央に固定
     sources.push(createVector(x, y));
