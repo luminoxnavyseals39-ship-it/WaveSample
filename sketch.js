@@ -5,6 +5,7 @@ let draggingIndex = -1;
 let waveFrequency = 0.05;
 let t = 0;
 let canvas;
+let logDisp = 0;  // 対数表示
 
 function setup() {
   const guiHeight = document.getElementById('controls').offsetHeight;
@@ -18,7 +19,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(128);
 
   waveFrequency = parseFloat(document.getElementById('waveFrequency').value);
   numSources = parseInt(document.getElementById('numSources').value);
@@ -42,10 +43,22 @@ function draw() {
         let d = p5.Vector.dist(p, sources[i]);
         combined += sin(d * waveFrequency - t + phases[i]);
       }
+      
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      if( logDisp == 1 ){
+        let rawValue = abs(combined); // 負の値を避ける
+        let log10Value = log(rawValue + 1) / log(10); // +1 で log(0) を回避
+        r = map(log10Value, 0, log(numSources + 1) / log(10), 0, 255);
+      }else{
+        r = map(abs(combined), 0, numSources, 0, 255);
+        b = map(combined, -numSources, numSources, 0, 255);
+      }
 
-      let r = map(abs(combined), 0, numSources, 0, 255);
-      let b = map(combined, -numSources, numSources, 0, 255);
       let index = (x + y * width) * 4;
+      
+      // 白黒表示
       pixels[index] = r;
       pixels[index + 1] = r;
       pixels[index + 2] = r;
