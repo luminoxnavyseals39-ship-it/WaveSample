@@ -4,7 +4,7 @@ let sources = [];
 let phases = [];
 
 function setup() {
-  createCanvas(800, 400);
+  createCanvas(windowWidth*0.5, windowHeight * 0.5);
   noStroke();
   initializeSources();
 
@@ -80,4 +80,9 @@ function initializeSources() {
     phaseContainer.appendChild(slider);
     phaseContainer.appendChild(document.createElement("br"));
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth * 0.5, windowHeight * 0.5);
+  initializeSources(); // 再配置
 }
