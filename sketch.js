@@ -59,7 +59,7 @@ function initializeSources() {
   phaseContainer.innerHTML = "";
 
   for (let i = 0; i < numSources; i++) {
-    let margin = height / numSources;
+    let margin = 100;
     let y = map(i, 0, Math.max(1, numSources - 1), margin, height - margin);
     sources.push(createVector(50, y));
     let defaultPhase = (180.0 * i) / numSources;
