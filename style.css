@@ -8,7 +8,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 80%;
   background: #ffffffee;
   padding: 10px;
   z-index: 10;
@@ -19,7 +19,7 @@ body {
 }
 
 #controls label {
-  font-size: 14px;
+  font-size: 1.2em;
   margin-right: 5px;
 }
 

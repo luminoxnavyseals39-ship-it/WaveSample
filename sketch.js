@@ -18,7 +18,7 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(0);
 
   waveFrequency = parseFloat(document.getElementById('waveFrequency').value);
   numSources = parseInt(document.getElementById('numSources').value);
@@ -47,24 +47,25 @@ function draw() {
       let b = map(combined, -numSources, numSources, 0, 255);
       let index = (x + y * width) * 4;
       pixels[index] = r;
-      pixels[index + 1] = 0;
-      pixels[index + 2] = b;
+      pixels[index + 1] = r;
+      pixels[index + 2] = r;
       pixels[index + 3] = 255;
     }
   }
   updatePixels();
-
-  fill(255, 0, 0);
+  
+  // 波源を描画
+  fill(0, 255, 0);
   for (let i = 0; i < numSources; i++) {
     let s = sources[i];
     ellipse(s.x, s.y, 20, 20);
     fill(255);
-    text("Source " + (i + 1), s.x - 20, s.y - 15);
-    fill(255, 0, 0);
+    text("波源 " + (i + 1), s.x - 20, s.y - 15);
+    fill(0, 255, 0);
   }
 
-  t += 0.05;
-  frameRate(15);
+  t += 0.1;
+  frameRate(30);
 }
 
 function mousePressed() {
@@ -95,7 +96,7 @@ function setupGUI() {
   phaseContainer.innerHTML = '';
   for (let i = 0; i < numSources; i++) {
     const label = document.createElement('label');
-    label.innerText = 'Phase ' + (i + 1);
+    label.innerText = '位相 ' + (i + 1);
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 0;
@@ -123,7 +124,7 @@ function initializeSources() {
     phases.push(PI * i / numSources);
 
     const label = document.createElement('label');
-    label.innerText = 'Phase ' + (i + 1);
+    label.innerText = '位相 ' + (i + 1);
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 0;
