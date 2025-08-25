@@ -58,11 +58,18 @@ function draw() {
 
       let index = (x + y * width) * 4;
       
-      // 白黒表示
-      pixels[index] = r;
-      pixels[index + 1] = r;
-      pixels[index + 2] = r;
-      pixels[index + 3] = 255;
+      if(r > 250){
+	      pixels[index] = r;
+	      pixels[index + 1] = 0;
+	      pixels[index + 2] = 0;
+	      pixels[index + 3] = 255;
+      }else{
+	      // 白黒表示
+	      pixels[index] = r;
+	      pixels[index + 1] = r;
+	      pixels[index + 2] = r;
+	      pixels[index + 3] = 255;
+      }
     }
   }
   updatePixels();
@@ -77,7 +84,7 @@ function draw() {
     fill(0, 255, 0);
   }
 
-  t += 0.1;
+  t += 0.2;
   frameRate(30);
 }
 
